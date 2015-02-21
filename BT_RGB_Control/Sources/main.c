@@ -60,11 +60,15 @@ int main(void)
 	{	   
 		SWTimer_vfnServiceTimers();
 		Bluetooth_vfnStateMachine();
-		
+		/* Confirm there's a BT device connected */
 		if(BLUETOOTH_CHECK_STATUS(BLUETOOTH_CONNECTED))
 		{
+			/* poll for BT data */
 			if(BLUETOOTH_CHECK_STATUS(BLUETOOTH_DATA_READY))
 			{
+				/* fill the command buffer, once the amount of bytes received matches 	*/
+				/* the expected, convert it from ascii and change the RGB value 		*/
+				/* assumes that data is always right									*/
 				gbaCommandBuffer[bCommandBufferOffset] = Bluetooth_bfnReadData();
 				
 				bCommandBufferOffset++;
@@ -89,7 +93,7 @@ int main(void)
 	
 	return 0;
 }
-
+/* [TODO] move it to a misc file or something */
 uint8_t bfnGetColorFromAscii(uint8_t * pbRgbBuffer)
 {
 	uint8_t bHigherNibble;
